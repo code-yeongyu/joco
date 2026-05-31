@@ -1,0 +1,34 @@
+{
+  "name": "jocohunt-cli",
+  "version": "0.1.5",
+  "description": "jocohunt-cli packages the JoCoHunt Go CLI with auth and submit support for npm installs.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code-yeongyu/joco.git"
+  },
+  "type": "module",
+  "bin": {
+    "jocohunt-cli": "npm/bin.js",
+    "jocohunt": "npm/bin.js"
+  },
+  "files": [
+    "npm/bin.js",
+    "npm/wrapper.js",
+    "npm/jocohunt",
+    "npm/jocohunt-*",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build:binaries": "bash scripts/build-npm-binaries.sh",
+    "test": "node --test npm/*.test.js",
+    "smoke": "node npm/bin.js --help && node npm/bin.js auth login --help && node npm/bin.js auth status --help && node npm/bin.js auth logout --help && node npm/bin.js submit --help"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
