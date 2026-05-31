@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: "1.26.x"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - name: Go tests
+        run: go test -race -shuffle=on -count=1 ./...
+      - name: Node tests
+        run: npm test
+      - name: Build npm binaries
+        shell: bash
+        run: npm run build:binaries
+      - name: CLI smoke
+        run: npm run smoke
+      - name: npm package dry run
+        run: npm pack --dry-run
+      - name: Live read-only smoke
+        if: matrix.os == 'macos-latest'
+        run: ./npm/jocohunt --timeout 30s inspect
